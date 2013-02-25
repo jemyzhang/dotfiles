@@ -1,0 +1,10 @@
+*.o
+*.elf
+*.bak
+*.swp
+*.bin
+*.map
+.*
+*~
+*.pyc
+*.tmp
