@@ -9,8 +9,8 @@ set shiftwidth=2  " indenting is 4 spaces
 set autoindent    " turns it on
 set smartindent   " does the right thing (mostly) in programs
 set cindent       " stricter rules for C programs
-
 set mouse=
+
 set nobackup
 set nowritebackup
 set autoread
@@ -47,6 +47,7 @@ set wildignore+=*.linux2,*.win32,*.darwin,*.freebsd,*.linux,*.android
 if has("autocmd")
     au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif | normal! zvzz
 endif
+
 
 let g:clipboard = {
       \   'name': 'myClipboard',

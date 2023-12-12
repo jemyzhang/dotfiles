@@ -25,7 +25,8 @@ Plug 'rhysd/vim-clang-format'
 Plug 'vim-scripts/a.vim'
 
 " explorer
-Plug 'kyazdani42/nvim-tree.lua'
+Plug 'nvim-tree/nvim-web-devicons'
+Plug 'nvim-tree/nvim-tree.lua'
 
 " git
 "Plug 'APZelos/blamer.nvim'
@@ -42,4 +43,19 @@ Plug 'simnalamburt/vim-mundo'
 " doxygen
 Plug 'vim-scripts/DoxygenToolkit.vim'
 
+" Install vim-codefmt and its dependencies
+Plug 'google/vim-maktaba'
+Plug 'google/vim-codefmt'
+
+" Install this plugin:
+Plug 'https://gn.googlesource.com/gn', { 'rtp': 'misc/vim' }
+
 call plug#end()
+
+" Optional: configure vim-codefmt to autoformat upon saving the buffer.
+augroup CodeFmt
+  autocmd!
+  autocmd FileType gn AutoFormatBuffer gn
+  " Other file types...
+augroup END
+
