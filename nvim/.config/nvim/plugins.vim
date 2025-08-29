@@ -11,7 +11,7 @@ Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'nvim-treesitter/nvim-treesitter-refactor'
 Plug 'romgrk/nvim-treesitter-context' " show context
 
-Plug 'p00f/nvim-ts-rainbow' " match braces, require nvim-treesitter
+Plug 'HiPhish/rainbow-delimiters.nvim' " match braces, require nvim-treesitter
 
 Plug 'voldikss/vim-floaterm', {'on': ['FloatermNew', 'FloatermToggle']}
 
@@ -21,7 +21,7 @@ Plug 'yazgoo/yank-history'
 
 " c/c++
 Plug 'dense-analysis/ale' " Linting
-Plug 'rhysd/vim-clang-format'
+"Plug 'rhysd/vim-clang-format'
 Plug 'vim-scripts/a.vim'
 
 " explorer
@@ -49,6 +49,8 @@ Plug 'google/vim-codefmt'
 
 " Install this plugin:
 Plug 'https://gn.googlesource.com/gn', { 'rtp': 'misc/vim' }
+
+Plug 'Exafunction/codeium.vim', { 'branch': 'main' }
 
 call plug#end()
 

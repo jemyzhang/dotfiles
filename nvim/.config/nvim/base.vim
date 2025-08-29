@@ -49,15 +49,15 @@ if has("autocmd")
 endif
 
 
-let g:clipboard = {
-      \   'name': 'myClipboard',
-      \   'copy': {
-      \      '+': ['xargs', '-0', 'clipcatctl', 'insert'],
-      \      '*': ['tmux', 'load-buffer', '-'],
-      \    },
-      \   'paste': {
-      \      '+': ['clipcatctl', 'get'],
-      \      '*': ['tmux', 'save-buffer', '-'],
-      \   },
-      \   'cache_enabled': 1,
-      \ }
+"let g:clipboard = {
+"      \   'name': 'myClipboard',
+"      \   'copy': {
+"      \      '+': ['xargs', '-0', 'clipcatctl', 'insert'],
+"      \      '*': ['tmux', 'load-buffer', '-'],
+"      \    },
+"      \   'paste': {
+"      \      '+': ['clipcatctl', 'get'],
+"      \      '*': ['tmux', 'save-buffer', '-'],
+"      \   },
+"      \   'cache_enabled': 1,
+"      \ }
