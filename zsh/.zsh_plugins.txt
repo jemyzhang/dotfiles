@@ -1,0 +1,7 @@
+zsh-users/zsh-autosuggestions
+z-shell/zsh-navigation-tools
+z-shell/F-Sy-H
+zsh-users/zsh-completions
+zsh-users/zsh-history-substring-search
+
+romkatv/powerlevel10k

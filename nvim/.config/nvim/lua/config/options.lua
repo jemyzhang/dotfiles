@@ -4,7 +4,7 @@ local opt = vim.opt
 
 -- 行号
 opt.number = true
-opt.relativenumber = true -- 相对行号
+-- opt.relativenumber = true -- 相对行号
 
 -- 缩进 (4个空格)
 opt.tabstop = 2
