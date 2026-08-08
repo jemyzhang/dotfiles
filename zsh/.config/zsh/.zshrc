@@ -10,8 +10,9 @@ export EDITOR='vi'
 
 # --- 历史记录配置 ---
 
-# 必须指定 HISTFILE 的绝对路径
-HISTFILE="$ZDOTDIR/.zsh_history"
+# 历史记录写入 XDG state 目录，避免污染配置目录
+HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
+mkdir -p "${HISTFILE:h}"
 
 # 内存中保留的记录条数
 HISTSIZE=10000
@@ -31,8 +32,9 @@ setopt SHARE_HISTORY
 # 记录命令的开始时间和持续时间
 setopt EXTENDED_HISTORY
 
-# 初始化补全系统
-autoload -Uz compinit && compinit
+# 初始化补全系统 (compdump 写入 XDG cache 目录)
+autoload -Uz compinit
+compinit -d "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
 
 # 开启菜单选择：按两下 Tab 进入选择模式
 zstyle ':completion:*' menu select
@@ -49,6 +51,9 @@ if [ -f ${ZDOTDIR:-$HOME}/.antidote/antidote.zsh ]; then
   antidote load ${ZDOTDIR:-$HOME}/.zsh_plugins.txt
 fi
 
+# fzf (Arch 下由 pacman 安装，集成脚本位于 /usr/share/fzf)
+[ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
+[ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
 [ -f ${ZDOTDIR:-$HOME}/.fzf.zsh ] && source ${ZDOTDIR:-$HOME}/.fzf.zsh
 [ -f ${ZDOTDIR:-$HOME}/.zshrc_export ] && source ${ZDOTDIR:-$HOME}/.zshrc_export
 [ -f "${ZDOTDIR:-$HOME}/aliases.zsh" ] && source "${ZDOTDIR:-$HOME}/aliases.zsh"

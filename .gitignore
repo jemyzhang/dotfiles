@@ -1,0 +1,14 @@
+# zsh runtime files (managed by antidote / compinit / history)
+.zsh_history
+.zsh_plugins.zsh
+.zcompdump*
+.antidote/
+
+# editor / os
+*.swp
+*.swo
+.DS_Store
+
+# backup
+*.bak
+*~
