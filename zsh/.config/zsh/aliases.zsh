@@ -245,11 +245,42 @@ alias run-help=man
 alias vc=code
 alias which-command=whence
 
+# ---- 目录栈持久化 + d() 跳转 (替代 omz dirs 插件) ----
+DIRSTACKFILE="${DIRSTACKFILE:-$HOME/.cache/zsh/dirs.stack}"
+DIRSTACKSIZE=${DIRSTACKSIZE:-20}
+
+# 普通 cd 也自动压栈；忽略重复；支持 cd -N
+setopt AUTO_PUSHD PUSHD_IGNORE_DUPS PUSHD_MINUS
+
+# 启动时恢复上次会话的目录栈
+[[ -f $DIRSTACKFILE ]] && dirstack=( ${(f)"$(<$DIRSTACKFILE)"} )
+
+# 每次 cd 后把 $PWD + 目录栈写入文件 (当前目录在最前, 共 DIRSTACKSIZE 条)
+autoload -Uz add-zsh-hook
+add-zsh-hook chpwd save_dirstack
+save_dirstack() {
+  # ~/.cache 可能被清理工具删掉，写前确保目录存在 (存在时零开销)
+  [[ -d ${DIRSTACKFILE:h} ]] || mkdir -p -- "${DIRSTACKFILE:h}"
+  print -l -- "$PWD" "${(@)dirstack[1,$(( DIRSTACKSIZE - 1 ))]}" > "$DIRSTACKFILE"
+}
+
+# omz dirs 插件同款：无参数时列出目录栈并跳转
+# 带参数时透传给 dirs (如 d -v)
 d() {
-        if [[ -n $1 ]]
-        then
-                dirs "$@"
-        else
-                dirs -v | head -n 10
-        fi
+  if [[ -n $1 ]]; then
+    dirs "$@"
+    return
+  fi
+  print -l -- "${(f)$(dirs -v | head -n 9)}"
+  local choice
+  read -r "choice?输入序号跳转目录 (回车取消): " || return
+  [[ -z $choice ]] && return 0
+  if [[ $choice == <-> && $choice -ge 1 && $choice -le $#dirstack ]]; then
+    # 注意: cd "~N" 引号内波浪号不会展开，直接用 dirstack 数组下标 (dirs -v 的 N 与 dirstack[N] 对应)
+    cd "${dirstack[$choice]}"
+  elif [[ $choice == 0 ]]; then
+    return 0
+  else
+    echo "无效序号: $choice"
+  fi
 }
