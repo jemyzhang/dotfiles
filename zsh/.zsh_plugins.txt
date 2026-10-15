@@ -1,5 +1,6 @@
 zsh-users/zsh-autosuggestions
-z-shell/zsh-navigation-tools
+# zsh-navigation-tools: 其 ^R 历史搜索已被 fzf 取代，移除以减负担
+# z-shell/zsh-navigation-tools
 z-shell/F-Sy-H
 zsh-users/zsh-completions
 zsh-users/zsh-history-substring-search

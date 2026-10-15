@@ -52,9 +52,14 @@ key[Control-Right]="${terminfo[kRIT5]}"
 [[ -n "${key[Control-Right]}" ]] && bindkey -- "${key[Control-Right]}" forward-word
 
 
-# 判断 history-substring-search-up 函数是否存在
+# ↑↓ 前缀历史搜索：输入前几个字符后按 ↑，只在匹配的历史里翻找
+# 同一个箭头键在不同终端/模式下是 ^[[A 或 ^[OA，两种都绑才稳
 if (( ${+functions[history-substring-search-up]} )); then
-    [[ -n "${key[Up]}" ]] && bindkey "${key[Up]}" history-substring-search-up
-    [[ -n "${key[Down]}" ]] && bindkey "${key[Down]}" history-substring-search-down
+    for seq in "${key[Up]}" '^[[A' '^[OA'; do
+        [[ -n "$seq" ]] && bindkey -- "$seq" history-substring-search-up
+    done
+    for seq in "${key[Down]}" '^[[B' '^[OB'; do
+        [[ -n "$seq" ]] && bindkey -- "$seq" history-substring-search-down
+    done
 fi
 

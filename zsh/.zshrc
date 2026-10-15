@@ -31,10 +31,8 @@ setopt SHARE_HISTORY
 # 记录命令的开始时间和持续时间
 setopt EXTENDED_HISTORY
 
-# 初始化补全系统
-autoload -Uz compinit && compinit
-
-# 开启菜单选择：按两下 Tab 进入选择模式
+# --- 补全样式 (须在 compinit 之前设置) ---
+# 开启菜单选择：按两下 Tab 进入选择模式，上下键在候选间循环
 zstyle ':completion:*' menu select
 
 # 补全列表外观优化 (颜色随 LS_COLORS)
@@ -44,15 +42,33 @@ zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
 
+# 模糊匹配: 大小写不敏感；前缀不命中时可匹配子串 (omz completion 库风格)
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* *'
+
 if [ -f ${ZDOTDIR:-$HOME}/.antidote/antidote.zsh ]; then
   source ${ZDOTDIR:-$HOME}/.antidote/antidote.zsh
   antidote load ${ZDOTDIR:-$HOME}/.zsh_plugins.txt
 fi
 
-[ -f ${ZDOTDIR:-$HOME}/.fzf.zsh ] && source ${ZDOTDIR:-$HOME}/.fzf.zsh
-[ -f ${ZDOTDIR:-$HOME}/.zshrc_export ] && source ${ZDOTDIR:-$HOME}/.zshrc_export
-[ -f "${ZDOTDIR:-$HOME}/aliases.zsh" ] && source "${ZDOTDIR:-$HOME}/aliases.zsh"
-[ -f "${ZDOTDIR:-$HOME}/keybinding.zsh" ] && source "${ZDOTDIR:-$HOME}/keybinding.zsh"
+# 补全系统必须在插件之后初始化:
+# zsh-completions 等插件先往 fpath 添加补全定义，之后 compinit 才能扫描注册
+autoload -Uz compinit && compinit
+
+# 在 $ZDOTDIR 中查找并 source，找不到则回退到 $HOME
+# 用法: zsource <文件名>   （只传文件名，不带路径）
+zsource() {
+  local name=$1 f
+  for f in "${ZDOTDIR:-$HOME}/$name" "$HOME/$name"; do
+    [[ -f $f ]] || continue
+    source "$f"
+    break
+  done
+}
+
+zsource .fzf.zsh
+zsource .zshrc_export
+zsource aliases.zsh
+zsource keybinding.zsh
 
 eval "$(zoxide init zsh)"
 
