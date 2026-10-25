@@ -43,7 +43,7 @@ zstyle ':completion:*' group-name ''
 zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
 
 # 模糊匹配: 大小写不敏感；前缀不命中时可匹配子串 (omz completion 库风格)
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* *'
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
 
 if [ -f ${ZDOTDIR:-$HOME}/.antidote/antidote.zsh ]; then
   source ${ZDOTDIR:-$HOME}/.antidote/antidote.zsh
@@ -65,7 +65,9 @@ zsource() {
   done
 }
 
-zsource .fzf.zsh
+if (( $+commands[fzf] )); then
+  eval "$(fzf --zsh)"
+fi
 zsource .zshrc_export
 zsource aliases.zsh
 zsource keybinding.zsh
