@@ -14,10 +14,10 @@ export EDITOR='vi'
 HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
 mkdir -p "${HISTFILE:h}"
 
-# 内存中保留的记录条数
-HISTSIZE=10000
+# 内存中保留的记录条数（设为极大值以保证历史记录无限制）
+HISTSIZE=1000000
 # 硬盘文件中保留的记录条数
-SAVEHIST=10000
+SAVEHIST=1000000
 
 # --- 历史记录高级优化 (可选但推荐) ---
 
@@ -31,6 +31,25 @@ setopt HIST_IGNORE_SPACE
 setopt SHARE_HISTORY
 # 记录命令的开始时间和持续时间
 setopt EXTENDED_HISTORY
+# 超过上限时优先淘汰重复命令
+setopt HIST_EXPIRE_DUPS_FIRST
+# 保存历史时省略更早的重复记录
+setopt HIST_SAVE_NO_DUPS
+
+# 让 history 默认打印全部历史命令（从第 1 条开始），而非 zsh 默认仅打印最后 16 条
+history() {
+  local has_num=0
+  for arg in "$@"; do
+    [[ "$arg" =~ ^-?[0-9]+$ ]] && has_num=1
+  done
+  if [[ $# -eq 0 ]]; then
+    builtin fc -l 1 2>/dev/null || true
+  elif [[ $has_num -eq 0 ]]; then
+    builtin fc -l "$@" 1 2>/dev/null || true
+  else
+    builtin fc -l "$@"
+  fi
+}
 
 # --- 补全样式 (须在 compinit 之前设置) ---
 # 开启菜单选择：按两下 Tab 进入选择模式，上下键在候选间循环
